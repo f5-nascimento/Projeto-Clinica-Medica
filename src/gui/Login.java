@@ -19,6 +19,7 @@ public class Login extends javax.swing.JFrame {
     private final UsuarioDAO controller;
     
     public Login() {
+        setTitle("Sistema de Gestão Clínica Médica");
         initComponents();
         controller = new UsuarioDAO(this);
     }
