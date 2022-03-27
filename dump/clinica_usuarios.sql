@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
 -- Host: localhost    Database: clinica
 -- ------------------------------------------------------
--- Server version	8.0.26
+-- Server version	8.0.28
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,9 +26,9 @@ CREATE TABLE `usuarios` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `senha` varchar(50) NOT NULL,
-  `perfil` varchar(50) NOT NULL,
+  `perfil` enum('Administrador','Médico','Recepcionista') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'admin','12345','administrador'),(2,'pedro','teste','medico');
+INSERT INTO `usuarios` VALUES (3,'admin','12345','Administrador'),(4,'alana','12345','Recepcionista'),(5,'pedro','teste','Médico');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-14 15:53:43
+-- Dump completed on 2022-03-27 20:30:52
