@@ -20,6 +20,7 @@ public class UsuarioDAO {
     private int id;
     private String username;
     private String senha;
+    private String perfil;
     private final Login gui;
     
      public UsuarioDAO(Login gui){ 
@@ -37,13 +38,15 @@ public class UsuarioDAO {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         try (Connection conn = (Connection) 
                 
-                DriverManager.getConnection("jdbc:mysql://localhost:3306/clinica?useTimezone=true&serverTimezone=UTC","root","kernel255"); 
+                DriverManager.getConnection("jdbc:mysql://localhost:3306/clinica?useTimezone=true&serverTimezone=UTC","root","12345"); 
                 Statement stmt = (Statement) conn.createStatement()) {
 
             String query = "select * from usuarios where username = '" + username +"' and senha = '" + senha + "'";
 
                 try (ResultSet rs = stmt.executeQuery(query)) {
                     if (rs.next()) {
+                        
+                       
        
                         if(query != null){
                            JOptionPane.showMessageDialog(null,"Conectado com sucesso");
