@@ -28,7 +28,7 @@ CREATE TABLE `usuarios` (
   `senha` varchar(50) NOT NULL,
   `perfil` enum('Administrador','Médico','Recepcionista') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (3,'admin','12345','Administrador'),(4,'alana','12345','Recepcionista'),(5,'pedro','teste','Médico');
+INSERT INTO `usuarios` VALUES (3,'admin','12345','Administrador'),(4,'alana','12345','Recepcionista'),(5,'pedro','teste','Médico'),(6,'felipe','12345','Administrador'),(7,'teste','123','Administrador'),(8,'Jesus','12345','Administrador'),(9,'Victor','12345','Administrador');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-27 20:30:52
+-- Dump completed on 2022-04-03 22:11:35

@@ -11,7 +11,7 @@ public class Conexao {
         
         try{
          
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/clinica?useTimezone=true&serverTimezone=UTC","root","12345");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/clinica?useTimezone=true&serverTimezone=UTC","root","kernel255");
 
     
 } catch(SQLException excecao){

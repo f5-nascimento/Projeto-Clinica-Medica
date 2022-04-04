@@ -2,17 +2,21 @@
 package dao;
 
 import factory.Conexao;
+import gui.CadastroUsuario;
 import gui.Login;
+import gui.MenuMedicos;
 import gui.MenuPrincipal;
+import gui.MenuRecepcionista;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
+import model.Usuario;
 
 public class UsuarioDAO {
     
@@ -21,60 +25,64 @@ public class UsuarioDAO {
     private String username;
     private String senha;
     private String perfil;
-    private final Login gui;
+    private Login gui;
+    private CadastroUsuario cu;
     
-     public UsuarioDAO(Login gui){ 
+    
+    public UsuarioDAO(){ 
         this.connection = new Conexao().getConnection();
-        this.gui = gui;
+        
+    }
+    
+    
+    public void inserir(Usuario usuario){
+    
+        String sql = "INSERT INTO usuarios(username, senha, perfil) "
+                + "VALUES(?,?,?)";
+        
+       try{
+           PreparedStatement stmt = connection.prepareStatement(sql);
+           stmt.setString(1, usuario.getUsername());
+           stmt.setString(2, usuario.getSenha());
+           stmt.setString(3, usuario.getPerfil());
+          
+           stmt.execute();
+           stmt.close();
+           
+           
+           
+       }
+       catch(SQLException u){
+           throw  new RuntimeException(u);
+       } 
+          
     }
      
-     public void logar(){
-       
-         
-         String username = gui.getTxtUsername().getText();
-         String senha = gui.getTxtSenha().getText();
-         
-         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        try (Connection conn = (Connection) 
-                
-                DriverManager.getConnection("jdbc:mysql://localhost:3306/clinica?useTimezone=true&serverTimezone=UTC","root","12345"); 
-                Statement stmt = (Statement) conn.createStatement()) {
-
-            String query = "select * from usuarios where username = '" + username +"' and senha = '" + senha + "'";
-
-                try (ResultSet rs = stmt.executeQuery(query)) {
-                    if (rs.next()) {
-                        
-                       
-       
-                        if(query != null){
-                           JOptionPane.showMessageDialog(null,"Conectado com sucesso");
-                           MenuPrincipal menu = new MenuPrincipal();
-                           menu.setVisible(true);
-                           this.gui.dispose();
-                        }
+    public Usuario consultar(Usuario usuario){
         
-                    }
-                    
-
-                    else {
-                        JOptionPane.showMessageDialog(null,"Usuário e/ou senha incorretos.");
-                        gui.getTxtUsername().setText("");
-                        gui.getTxtSenha().setText("");
-                        
-                    }   
-                }
-        
-                    //caso seja preciso mais tipos de acesso, copie e cole o código do IF para cada cargo
-
+        Usuario consulta = new Usuario();
+        String sql = "select *"
+                + "from usuarios where id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1,String.valueOf(usuario.getId()));
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                consulta.setUsername(rs.getString(2));
+                consulta.setSenha(rs.getString(3));
+                consulta.setPerfil(rs.getString(4));
+            
+            }
+            else{
+                consulta = null;
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException u) {
+            throw new RuntimeException(u);
+        }
+        return(consulta);
+    }
     
-        }
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        
-   }
     
 }

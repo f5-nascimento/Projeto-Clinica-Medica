@@ -9,6 +9,10 @@ public class Usuario {
     private String senha;
     private String perfil;
 
+    public Usuario(){
+        
+    }
+    
     public Usuario(int id, String username, String senha, String perfil) {
         this.id = id;
         this.username = username;

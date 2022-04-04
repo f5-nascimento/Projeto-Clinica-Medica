@@ -5,7 +5,7 @@
  */
 package gui;
 
-import dao.UsuarioDAO;
+import dao.LoginDAO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
@@ -17,14 +17,15 @@ import javax.swing.JTextField;
  */
 public class Login extends javax.swing.JFrame {
 
-    private final UsuarioDAO controller;
+    private final LoginDAO controller;
     
     public Login() {
         setTitle("Sistema de Gestão Clínica Médica");
         
         initComponents();
         this.setLocationRelativeTo(null); //TELA CENTRALIZADA - UTILIZADO TAMBÉM A PROPRIEDADE DO JFRAME UNDECORATED       
-        controller = new UsuarioDAO(this);
+        controller = new LoginDAO(this);
+        
     }
 
     /**
