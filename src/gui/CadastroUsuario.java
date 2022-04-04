@@ -7,6 +7,9 @@ package gui;
 
 import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 import dao.UsuarioDAO;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -348,11 +351,64 @@ public class CadastroUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelMinMouseClicked
 
     private void btnAtualizarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarUsuarioActionPerformed
-        // TODO add your handling code here:
+        
+        if (txtId.getText().isEmpty()) { //jTextField6 se refere ao campo de texto do ID
+            JOptionPane.showMessageDialog(null, "Digite o ID."); 
+            }
+            else {
+            try {
+            //Registra JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            //Abrindo a conexão
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/clinica?useTimezone=true"+"&serverTimezone=UTC","root","12345");
+            //Executa a query de atualização
+            java.sql.Statement st = conn.createStatement();
+            st.executeUpdate("UPDATE usuarios SET username='"
+            + this.txtUsername.getText() + "',senha='"
+            + this.txtSenha.getText()+ "',perfil='"
+            + this.jComboBoxPerfil.getSelectedItem()
+            + "' WHERE id='" + this.txtId.getText() + "'");
+            JOptionPane.showMessageDialog(rootPane, "Usuário atualizado com sucesso!");
+            } catch (SQLException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(rootPane, e);
+            }//Fim try
+            txtUsername.setText("");
+            txtSenha.setText("");
+            jComboBoxPerfil.setSelectedItem(""); 
+         
+            } 
+
+        
+        
     }//GEN-LAST:event_btnAtualizarUsuarioActionPerformed
 
     private void btnApagarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarUsuarioActionPerformed
-        // TODO add your handling code here:
+        
+        if (txtId.getText().isEmpty()) { //jTextField6 se refere ao campo de texto do ID
+            JOptionPane.showMessageDialog(null, "Digite o ID."); 
+            }
+            else { 
+            try {
+            //Registra JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            //Abrindo a conexão
+            Connection conn = 
+           DriverManager.getConnection("jdbc:mysql://localhost/clinica?useTimezone=true"+"&serverTimezone=UTC","root","12345"); 
+            //Executa a query de exclusão
+            java.sql.Statement st = conn.createStatement();
+            st.executeUpdate("DELETE FROM usuarios WHERE id='" + this.txtId.getText() + "'");
+            JOptionPane.showMessageDialog(rootPane, "Usuário excluído com sucesso!");
+            } 
+            catch (SQLException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(rootPane, e);
+            }//Fim try
+            txtUsername.setText(""); 
+            txtSenha.setText("");
+            jComboBoxPerfil.setSelectedItem("");
+            
+            }
+        
+        
     }//GEN-LAST:event_btnApagarUsuarioActionPerformed
 
     private void btnInserirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirUsuarioActionPerformed

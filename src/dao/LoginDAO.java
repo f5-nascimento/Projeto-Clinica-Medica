@@ -50,7 +50,7 @@ public class LoginDAO {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         try (Connection conn = (Connection) 
                 
-                DriverManager.getConnection("jdbc:mysql://localhost:3306/clinica?useTimezone=true&serverTimezone=UTC","root","kernel255"); 
+                DriverManager.getConnection("jdbc:mysql://localhost:3306/clinica?useTimezone=true&serverTimezone=UTC","root","12345"); 
                 Statement stmt = (Statement) conn.createStatement()) {
 
             String query = "select * from usuarios where username = '" + username +"' and senha = '" + senha + "'";
