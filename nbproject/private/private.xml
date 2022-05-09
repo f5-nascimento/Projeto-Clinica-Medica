@@ -4,7 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/nasci/Documents/NetBeansProjects/Projeto-Clinica-M-dica-main/src/gui/CadastroUsuario.java</file>
-            <file>file:/C:/Users/nasci/Documents/NetBeansProjects/Projeto-Clinica-M-dica-main/src/dao/UsuarioDAO.java</file>
+            <file>file:/C:/Users/nasci/Documents/NetBeansProjects/Projeto-Clinica-M-dica-main/src/gui/MenuPrincipal.java</file>
+            <file>file:/C:/Users/nasci/Documents/NetBeansProjects/Projeto-Clinica-M-dica-main/src/factory/Conexao.java</file>
         </group>
     </open-files>
 </project-private>

@@ -9,6 +9,8 @@ import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 import dao.UsuarioDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import model.Usuario;
 
 /**
@@ -31,10 +34,44 @@ public class CadastroUsuario extends javax.swing.JFrame {
         setTitle("Cadastro de Usuário - SGCM");
         
         initComponents();
+        carregaTabela();
         this.setLocationRelativeTo(null); //TELA CENTRALIZADA - UTILIZADO TAMBÉM A PROPRIEDADE DO JFRAME UNDECORATED       
          //controller = new UsuarioDAO(this);
         controller = new UsuarioDAO();
     }
+    
+      public void PopularJTable(String sql) {
+          try
+          {
+           Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/clinica?useTimezone=true"+"&serverTimezone=UTC","root","12345");
+           PreparedStatement banco = (PreparedStatement)conn.prepareStatement(sql);
+           banco.execute(); // cria o vetor
+
+           ResultSet resultado = banco.executeQuery(sql);
+
+           DefaultTableModel model =(DefaultTableModel) jUsuarios.getModel();
+           model.setNumRows(0);
+
+           while(resultado.next())
+           {
+               model.addRow(new Object[] 
+               { 
+                  //retorna os dados da tabela do BD, cada campo e um coluna.
+                  resultado.getString("id"),
+                  resultado.getString("username"),
+                  resultado.getString("senha"),
+                  resultado.getString("perfil"),
+                  
+               }); 
+          } 
+           banco.close();
+           conn.close();
+          }
+         catch (SQLException ex)
+         {
+            System.out.println("o erro foi " +ex);
+          }
+         }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,14 +90,17 @@ public class CadastroUsuario extends javax.swing.JFrame {
         txtId = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         btnAtualizarUsuario = new javax.swing.JButton();
-        btnApagarUsuario = new javax.swing.JButton();
         btnInserirUsuario = new javax.swing.JButton();
         jComboBoxPerfil = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         btnVoltarUsuario = new javax.swing.JButton();
-        btnLimparUsuario = new javax.swing.JButton();
         btnPesquisarUsuario = new javax.swing.JButton();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        btnApagarUsuario = new javax.swing.JButton();
+        btnLimparUsuario = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jUsuarios = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabelClose = new javax.swing.JLabel();
@@ -115,18 +155,6 @@ public class CadastroUsuario extends javax.swing.JFrame {
             }
         });
 
-        btnApagarUsuario.setBackground(new java.awt.Color(255, 255, 255));
-        btnApagarUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnApagarUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        btnApagarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icons/delete-24.png"))); // NOI18N
-        btnApagarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnApagarUsuario.setEnabled(false);
-        btnApagarUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnApagarUsuarioActionPerformed(evt);
-            }
-        });
-
         btnInserirUsuario.setBackground(new java.awt.Color(255, 255, 255));
         btnInserirUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnInserirUsuario.setForeground(new java.awt.Color(255, 255, 255));
@@ -164,6 +192,40 @@ public class CadastroUsuario extends javax.swing.JFrame {
             }
         });
 
+        btnPesquisarUsuario.setBackground(new java.awt.Color(255, 255, 255));
+        btnPesquisarUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnPesquisarUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        btnPesquisarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icons/search-3-24.png"))); // NOI18N
+        btnPesquisarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPesquisarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarUsuarioActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        btnApagarUsuario.setBackground(new java.awt.Color(255, 255, 255));
+        btnApagarUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnApagarUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        btnApagarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icons/delete-24.png"))); // NOI18N
+        btnApagarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnApagarUsuario.setEnabled(false);
+        btnApagarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApagarUsuarioActionPerformed(evt);
+            }
+        });
+
         btnLimparUsuario.setBackground(new java.awt.Color(255, 255, 255));
         btnLimparUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnLimparUsuario.setForeground(new java.awt.Color(255, 255, 255));
@@ -175,16 +237,25 @@ public class CadastroUsuario extends javax.swing.JFrame {
             }
         });
 
-        btnPesquisarUsuario.setBackground(new java.awt.Color(255, 255, 255));
-        btnPesquisarUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnPesquisarUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        btnPesquisarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icons/search-3-24.png"))); // NOI18N
-        btnPesquisarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPesquisarUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPesquisarUsuarioActionPerformed(evt);
+        jUsuarios.setAutoCreateRowSorter(true);
+        jUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "USERNAME", "SENHA", "PERFIL"
+            }
+        ));
+        jUsuarios.setGridColor(new java.awt.Color(210, 215, 211));
+        jUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jUsuariosMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(jUsuarios);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -210,61 +281,75 @@ public class CadastroUsuario extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNovoUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnInserirUsuario, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(32, 32, 32)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnVoltarUsuario)
+                    .addComponent(btnAtualizarUsuario))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnNovoUsuario)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnVoltarUsuario))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnInserirUsuario)
-                                .addGap(27, 27, 27)
-                                .addComponent(btnAtualizarUsuario)))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnApagarUsuario)
-                            .addComponent(btnLimparUsuario))))
-                .addGap(0, 298, Short.MAX_VALUE))
+                        .addGap(16, 16, 16)
+                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnLimparUsuario)
+                            .addComponent(btnApagarUsuario))))
+                .addGap(87, 87, 87))
+            .addComponent(jScrollPane1)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPesquisarUsuario))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBoxPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnNovoUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addComponent(btnInserirUsuario))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPesquisarUsuario))
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5)
+                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jComboBoxPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVoltarUsuario)
-                            .addComponent(btnLimparUsuario))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnAtualizarUsuario)
-                            .addComponent(btnApagarUsuario))))
-                .addContainerGap(47, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnLimparUsuario)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnAtualizarUsuario)
+                                    .addComponent(btnInserirUsuario)
+                                    .addComponent(btnApagarUsuario)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnVoltarUsuario)
+                                    .addComponent(btnNovoUsuario))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(4, 4, 4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 660, 390));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 770, 480));
 
         jPanel1.setBackground(new java.awt.Color(30, 81, 123));
 
@@ -297,7 +382,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(105, Short.MAX_VALUE)
+                .addContainerGap(215, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(194, 194, 194)
                 .addComponent(jLabelMin)
@@ -316,7 +401,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 60));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 770, 60));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -378,7 +463,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
          
             } 
 
-        
+        carregaTabela();
         
     }//GEN-LAST:event_btnAtualizarUsuarioActionPerformed
 
@@ -408,7 +493,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
             
             }
         
-        
+        carregaTabela();
     }//GEN-LAST:event_btnApagarUsuarioActionPerformed
 
     private void btnInserirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirUsuarioActionPerformed
@@ -442,7 +527,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
           txtSenha.setText("");
           jComboBoxPerfil.setSelectedItem("");
         
-          
+          carregaTabela();
         
         
         
@@ -524,6 +609,86 @@ public class CadastroUsuario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnPesquisarUsuarioActionPerformed
 
+    private void jUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUsuariosMouseClicked
+        
+        /*
+        txtIdMedicos.setEnabled(true);
+        txtNomeMedicos.setEnabled(true);
+        txtCrmMedicos.setEnabled(true);
+        txtEspecialidadeMedicos.setEnabled(true);
+        txtSalarioMedicos.setEnabled(true);
+        btnPesquisar.setEnabled(true);
+        btnSalvar.setEnabled(true);
+        btnAlterar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        btnLimpar.setEnabled(true);
+        */
+        
+        txtId.setEnabled(true);
+        btnPesquisarUsuario.setEnabled(true);
+        btnNovoUsuario.setEnabled(true);
+        btnInserirUsuario.setEnabled(false);
+        btnAtualizarUsuario.setEnabled(true);
+        btnApagarUsuario.setEnabled(true);
+        txtUsername.setEnabled(true);
+        txtSenha.setEnabled(true);
+        jComboBoxPerfil.setEnabled(true);
+        
+        int linha = jUsuarios.getSelectedRow(); // retorna a linha selecionada pelo usuario
+        txtId.setText(jUsuarios.getValueAt(linha,0).toString()); // retorna o valor da celula linha X 0
+        txtUsername.setText(jUsuarios.getValueAt(linha,1).toString()); // retorna o valor da celula linha X 1
+        txtSenha.setText(jUsuarios.getValueAt(linha,2).toString()); // retorna o valor da celula linha X 2
+        jComboBoxPerfil.setSelectedItem(jUsuarios.getValueAt(linha,3).toString()); // retorna o valor da celula linha X 2
+        
+        
+        
+    }//GEN-LAST:event_jUsuariosMouseClicked
+
+    
+    private void carregaTabela(){
+        
+        DefaultTableModel modelo = (DefaultTableModel) jUsuarios.getModel();
+        modelo.setNumRows(0);
+        
+        jUsuarios.getColumnModel().getColumn(0).setPreferredWidth(20);
+        jUsuarios.getColumnModel().getColumn(1).setPreferredWidth(25);
+        jUsuarios.getColumnModel().getColumn(2).setPreferredWidth(25);
+        jUsuarios.getColumnModel().getColumn(3).setPreferredWidth(25);
+        
+        
+        try {
+            
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/clinica?useTimezone=true"+"&serverTimezone=UTC","root","12345");
+            PreparedStatement pstm;
+            ResultSet rs;
+            pstm = conn.prepareStatement("select * from usuarios");
+            rs  = pstm.executeQuery();
+            
+            while(rs.next()){
+                modelo.addRow(new Object[]{
+                    
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4)
+                   
+                    
+                    
+                    
+                
+            });
+            }
+            pstm.close();
+            conn.close();
+            
+            
+        } catch (Exception ErroSql) {
+            
+            JOptionPane.showMessageDialog(null, "Erro ao carregar os dados da tabela" + ErroSql, "Erro", JOptionPane.ERROR_MESSAGE );
+        }
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -576,8 +741,11 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelClose;
     private javax.swing.JLabel jLabelMin;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jUsuarios;
     private javax.swing.JTextField txtId;
     private javax.swing.JPasswordField txtSenha;
     private javax.swing.JTextField txtUsername;
